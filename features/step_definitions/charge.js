@@ -8,7 +8,7 @@ module.exports = function() {
   this.When(/^test token is retrieved$/, function (callback) {
     var onetimetoken = new this.paymentwall.Onetimetoken(
       4000000000000002,
-      01,
+      0o1,
       2017,
       cvv
     );
