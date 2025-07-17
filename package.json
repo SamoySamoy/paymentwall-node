@@ -30,7 +30,7 @@
     "chai": "4.3.7",
     "cheerio": "1.0.0-rc.12",
     "cucumber": "1.*",
-    "request": "*"
+    "axios": "^1.4.0"
   },
   "license": "MIT",
   "homepage": "http://www.paymentwall.com",
