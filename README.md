@@ -45,7 +45,6 @@ var widget = new Paymentwall.Widget(
   'user40012',                                // id of the end-user who's making the payment
   'pw',                                       // widget code, e.g. pw; can be picked in the Widgets section of your merchant account 
   [                                           // product details for Flexible Widget Call. 
-                                              // Leave empty if product selection happens on Paymentwall's side
     new Paymentwall.Product(
         'product301',                         // ag_external_id
         12.12,                                // amount
