@@ -21,9 +21,9 @@ Then use a code sample below.
 
 # Code Samples
 
-## Digital Goods API
+## Checkout API
 
-[Web API details](http://www.paymentwall.com/en/documentation/Digital-Goods-API/710#paymentwall_widget_call_flexible_widget_call)
+[Web API details](https://docs.paymentwall.com/apis#section-checkout-onetime)
 
 #### Initializing Paymentwall
 
@@ -47,17 +47,61 @@ var widget = new Paymentwall.Widget(
   [                                           // product details for Flexible Widget Call. 
                                               // Leave empty if product selection happens on Paymentwall's side
     new Paymentwall.Product(
-      'product301',                           // id of the product in your system  
-      9.99,                                   // price
-      'USD',                                  // currency code
-      'Gold Membership',                      // product name
-      // if it is a onetime charge product, you don't need to configure time-based part
-      Paymentwall.Product.TYPE_SUBSCRIPTION,  // this is a time-based product
-      1,                                      // length of product period
-      Paymentwall.Product.PERIOD_TYPE_MONTH,  // type of product period
-      true                                    // this is a recurring product
+        'product301',                         // ag_external_id
+        12.12,                                // amount
+        'USD',                                // currencyCode
+        'test',                               // ag_name
+        Product.TYPE_FIXED                    // ag_type
     )
   ],
+  {'email': 'user@hostname.com'}              // additional parameters. for full list check API docs
+);
+console.log(widget.getHtmlCode());
+```
+
+#### Pingback Processing
+
+The Pingback is a webhook notifying about a payment being made. Pingbacks are sent via HTTP/HTTPS to your servers. To process pingbacks use the following code:
+
+```javascript
+var pingback = new Paymentwall.Pingback("query data in pingback request", "ip address of pingback");
+if (pingback.validate()) {
+  var productId = pingback.getProduct().getId();
+  if (pingback.isDeliverable()) {
+    // deliver the product
+  } else if (pingback.isCancelable()) {
+    // withdraw the product
+  } 
+  console.log('OK'); // Paymentwall expects the string OK in response, otherwise the pingback will be resent
+} else {
+  console.log(pingback.getErrorSummary());
+}
+```
+
+## Digital Goods API
+
+[Web API details](https://docs.paymentwall.com/apis#section-widget-dg)
+
+#### Initializing Paymentwall
+
+```javascript
+var Paymentwall = require('paymentwall');
+Paymentwall.Configure(
+  Paymentwall.Base.API_GOODS,
+  'YOUR_APPLICATION_KEY',
+  'YOUR_SECRET_KEY'
+);
+```
+
+#### Widget Call
+
+The widget is a payment page hosted by Paymentwall that embeds the entire payment flow: selecting the payment method, completing the billing details, and providing customer support via the Help section. You can redirect the users to this page or embed it via iframe. The sample code below renders an iframe with Paymentwall Widget.
+
+```javascript
+var widget = new Paymentwall.Widget(
+  'user40012',                                // id of the end-user who's making the payment
+  'pw',                                       // widget code, e.g. pw; can be picked in the Widgets section of your merchant account 
+  [],                                         // empty for digital goods api
   {'email': 'user@hostname.com'}              // additional parameters. for full list check API docs
 );
 console.log(widget.getHtmlCode());
